@@ -5,6 +5,14 @@ making time for the people around you, and deciding what success means. The play
 travels through seven chapters, from age 7 to age 21. In every chapter they read a
 short scene, choose one activity, and resolve a milestone before moving forward.
 
+## Play online
+
+The GitHub Pages build is available at:
+
+https://potatobummer.github.io/TahuBergerdilGames/
+
+On iPhone, open the site in Safari and use **Share → Add to Home Screen** to install it like an app.
+
 ## Play locally
 
 Because the game uses JavaScript modules, serve the repository over HTTP instead of
