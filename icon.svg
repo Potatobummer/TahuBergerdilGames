@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Tahu Bergedil Games icon">
+  <rect width="512" height="512" rx="112" fill="#0d1117"/>
+  <circle cx="256" cy="256" r="150" fill="#f0f6fc"/>
+  <path d="M150 265c0-58 47-105 106-105s106 47 106 105c0 43-26 80-63 96v31h-86v-31c-37-16-63-53-63-96Z" fill="#d29922"/>
+  <path d="M201 242c15-22 35-33 55-33s40 11 55 33c-17-7-35-10-55-10s-38 3-55 10Z" fill="#0d1117" opacity=".9"/>
+  <circle cx="220" cy="276" r="10" fill="#0d1117"/>
+  <circle cx="292" cy="276" r="10" fill="#0d1117"/>
+  <path d="M220 320c24 18 48 18 72 0" fill="none" stroke="#0d1117" stroke-width="12" stroke-linecap="round"/>
+</svg>
