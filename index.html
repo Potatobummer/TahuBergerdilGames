@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A seven-chapter coming-of-age browser story.">
+    <title>Tahu Bergedil Games</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="game-shell" id="game">
+      <header class="masthead">
+        <p class="eyebrow">A tiny story about a big life</p>
+        <h1>Tahu Bergedil Games</h1>
+      </header>
+
+      <section id="screen" class="card" aria-live="polite"></section>
+
+      <footer class="toolbar" id="toolbar" hidden>
+        <button type="button" class="button button--quiet" id="save-button">Save progress</button>
+        <button type="button" class="button button--quiet" id="restart-button">Restart</button>
+        <span id="save-status" role="status"></span>
+      </footer>
+    </main>
+    <noscript>This story needs JavaScript enabled to play.</noscript>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
