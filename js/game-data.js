@@ -6,7 +6,7 @@ export const CHARACTERS = [
     motivation: "Make gentle food that leaves lonely people feeling held.",
     personality: ["patient", "inventive", "tender-hearted"],
     startingAge: 7,
-    role: "The soothing heart and custodian of Grandma's recipe",
+    role: "The gentle healer · Guardian of Grandma's restorative recipes",
     attributes: { joy: 2, skill: 1, bonds: 3 },
     growth: { joy: 2, skill: 1, bonds: 2 },
     startingAbility: "Cooling touch",
@@ -25,7 +25,7 @@ export const CHARACTERS = [
     motivation: "Give people enough strength to stand up, work together, and come home.",
     personality: ["brave", "boisterous", "loyal"],
     startingAge: 8,
-    role: "The hearty protector and fearless field cook",
+    role: "The stalwart gardener · Loyal protector of the shared table",
     attributes: { joy: 3, skill: 2, bonds: 1 },
     growth: { joy: 1, skill: 2, bonds: 2 },
     startingAbility: "Starch shield",
@@ -140,8 +140,8 @@ export const CHAPTERS = [
     ],
     milestone: "Who offers the first nourishing portion?",
     choices: [
-      { label: "Silken shares a tender spoonful", result: "The classmate feels understood; Silken feels the strange cost of becoming a little less solid.", effects: effects(gain({ bonds: 3 }, -12, 2, "Comforting portion"), gain({ bonds: 1 }, 0, 1)) },
-      { label: "Bergie shares a golden piece", result: "Strength returns to the classmate; a dent remains in Bergie's brave armour.", effects: effects(gain({ bonds: 1 }, 0, 1), gain({ bonds: 3 }, -12, 2, "Courage portion")) }
+      { label: "Silken shares a tender spoonful", hint: "Silken gains stronger Bonds and learns a caring ability, but loses more vitality.", result: "The classmate feels understood; Silken feels the strange cost of becoming a little less solid.", effects: effects(gain({ bonds: 3 }, -12, 2, "Comforting portion"), gain({ bonds: 1 }, 0, 1)) },
+      { label: "Bergie shares a golden piece", hint: "Bergie gains stronger Bonds and learns a brave ability, but loses more vitality.", result: "Strength returns to the classmate; a dent remains in Bergie's brave armour.", effects: effects(gain({ bonds: 1 }, 0, 1), gain({ bonds: 3 }, -12, 2, "Courage portion")) }
     ]
   },
   {
@@ -152,8 +152,8 @@ export const CHAPTERS = [
       { label: "Share the cooking work", detail: "Both gain Skill with a smaller cost", effects: effects(gain({ skill: 2 }, -3), gain({ skill: 2 }, -3)) }
     ], milestone: "A soaked team needs more food than either friend can safely give.",
     choices: [
-      { label: "Set a portion limit", result: "They feed everyone by asking the neighbourhood to contribute ingredients too.", effects: effects(gain({ bonds: 2 }, -5, 2, "Gentle boundary"), gain({ bonds: 2 }, -5, 2, "Garden muster")) },
-      { label: "Give until the trays are full", result: "Everyone eats, but their friends must carry the exhausted pair home.", effects: effects(gain({ bonds: 3 }, -15, 2), gain({ bonds: 3 }, -15, 2)) }
+      { label: "Set a portion limit", hint: "Safer recovery for both, plus two new boundary-focused abilities.", result: "They feed everyone by asking the neighbourhood to contribute ingredients too.", effects: effects(gain({ bonds: 2 }, -5, 2, "Gentle boundary"), gain({ bonds: 2 }, -5, 2, "Garden muster")) },
+      { label: "Give until the trays are full", hint: "More Bonds now, with a much heavier vitality cost for both.", result: "Everyone eats, but their friends must carry the exhausted pair home.", effects: effects(gain({ bonds: 3 }, -15, 2), gain({ bonds: 3 }, -15, 2)) }
     ]
   },
   {
@@ -164,8 +164,8 @@ export const CHAPTERS = [
       { label: "Trade stories over soy milk", detail: "Silken recovers deeply; Bergie keeps watch", effects: effects(gain({ joy: 1 }, 22, 2, "Soy-milk renewal"), gain({ bonds: 2 }, 8)) }
     ], milestone: "The lunch bell rings before recovery is complete.",
     choices: [
-      { label: "Trust friends to serve today", result: "The stall survives without consuming its heroes, and both learn that receiving care is part of giving it.", effects: effects(gain({ bonds: 3 }, 12, 2), gain({ bonds: 3 }, 12, 2)) },
-      { label: "Teach the recovery recipe", result: "Customers become caretakers and prepare the beds and milk for tomorrow.", effects: effects(gain({ skill: 2 }, 10, 2), gain({ skill: 2 }, 10, 2)) }
+      { label: "Trust friends to serve today", hint: "Larger Bonds gain and stronger recovery for both heroes.", result: "The stall survives without consuming its heroes, and both learn that receiving care is part of giving it.", effects: effects(gain({ bonds: 3 }, 12, 2), gain({ bonds: 3 }, 12, 2)) },
+      { label: "Teach the recovery recipe", hint: "Larger Skill gain with solid recovery for both heroes.", result: "Customers become caretakers and prepare the beds and milk for tomorrow.", effects: effects(gain({ skill: 2 }, 10, 2), gain({ skill: 2 }, 10, 2)) }
     ]
   },
   {
@@ -176,8 +176,8 @@ export const CHAPTERS = [
       { label: "Write a rest rota", detail: "Both recover and strengthen Bonds", effects: effects(gain({ bonds: 2 }, 10), gain({ bonds: 2 }, 10)) }
     ], milestone: "Judges demand a dramatic sacrifice for the final plate.",
     choices: [
-      { label: "Say no and explain the cost", result: "Their boundary changes the contest rules: no meal may require an unwilling giver.", effects: effects(gain({ joy: 2, bonds: 2 }, 5, 2, "Clear consent"), gain({ joy: 2, bonds: 2 }, 5, 2, "Clear consent")) },
-      { label: "Offer one measured portion each", result: "They choose the gift together, then schedule the recovery it demands.", effects: effects(gain({ skill: 2 }, -7, 2), gain({ skill: 2 }, -7, 2)) }
+      { label: "Say no and explain the cost", hint: "Joy, Bonds, vitality, and the Clear consent ability for both.", result: "Their boundary changes the contest rules: no meal may require an unwilling giver.", effects: effects(gain({ joy: 2, bonds: 2 }, 5, 2, "Clear consent"), gain({ joy: 2, bonds: 2 }, 5, 2, "Clear consent")) },
+      { label: "Offer one measured portion each", hint: "More Skill for both, at a measured vitality cost.", result: "They choose the gift together, then schedule the recovery it demands.", effects: effects(gain({ skill: 2 }, -7, 2), gain({ skill: 2 }, -7, 2)) }
     ]
   },
   {
@@ -188,8 +188,8 @@ export const CHAPTERS = [
       { label: "Culture the living starter", detail: "Silken leads; Bergie protects the kitchen", effects: effects(gain({ skill: 3 }, 5, 2, "Living starter"), gain({ bonds: 3 })) }
     ], milestone: "What promise will guide every future feast?",
     choices: [
-      { label: "Care must return to its givers", result: "Every guest tends the sources that fed them; recovery becomes a shared ritual.", effects: effects(gain({ bonds: 3 }, 15, 3), gain({ bonds: 3 }, 15, 3)) },
-      { label: "No one nourishes alone", result: "Many small, willing gifts make a table where neither friend has to vanish.", effects: effects(gain({ joy: 3 }, 15, 3), gain({ joy: 3 }, 15, 3)) }
+      { label: "Care must return to its givers", hint: "A final Bonds-focused promise with deep recovery.", result: "Every guest tends the sources that fed them; recovery becomes a shared ritual.", effects: effects(gain({ bonds: 3 }, 15, 3), gain({ bonds: 3 }, 15, 3)) },
+      { label: "No one nourishes alone", hint: "A final Joy-focused promise with deep recovery.", result: "Many small, willing gifts make a table where neither friend has to vanish.", effects: effects(gain({ joy: 3 }, 15, 3), gain({ joy: 3 }, 15, 3)) }
     ]
   }
 ];

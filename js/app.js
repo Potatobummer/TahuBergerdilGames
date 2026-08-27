@@ -41,7 +41,7 @@ function seasonsMarkup() {
 function charactersMarkup({ compact = false } = {}) {
   return `<div class="character-panels ${compact ? "character-panels--compact" : ""}" aria-label="Character status">${CHARACTERS.map((record) => {
     const character = state.characters[record.id];
-    return `<section class="character-panel" aria-labelledby="${record.id}-name">
+    return `<section class="character-panel" data-character="${record.id}" aria-labelledby="${record.id}-name">
       <img class="portrait" src="assets/images/${record.id}.webp" alt="" width="160" height="160">
       <div class="character-copy">
         <h3 id="${record.id}-name">${record.name}</h3>
@@ -62,6 +62,7 @@ function charactersMarkup({ compact = false } = {}) {
 }
 
 function renderTitle() {
+  document.body.classList.remove("playing");
   toolbar.hidden = true;
   const saved = loadState();
   setScreen(`<div class="title-layout">
@@ -89,8 +90,10 @@ function startGame() {
 }
 
 function render() {
+  document.body.classList.add("playing");
   toolbar.hidden = false;
-  saveStatus.textContent = "";
+  saveStatus.className = "save-indicator";
+  saveStatus.textContent = navigator.onLine ? "Progress autosaves · Offline ready" : "Playing offline · Progress autosaves";
   const chapter = CHAPTERS[state.chapter];
 
   if (state.phase === "dialogue") renderDialogue(chapter);
@@ -114,17 +117,43 @@ function renderDialogue(chapter) {
 }
 
 function renderPlanning(chapter) {
+  const previousSchedule = [...state.history].reverse().find((entry) => entry.schedule)?.schedule;
   setScreen(`${headingMarkup(chapter)}${resourcesMarkup()}${seasonsMarkup()}
     <div class="planning-intro">
       <p class="chapter-label">${SEASONS[state.season]}</p>
       <p>Choose one activity for each friend. Matching plans strengthen their partnership; separate plans can develop them in different ways.</p>
     </div>
     <form id="schedule-form">
+      ${previousSchedule ? '<button type="button" class="button button--quiet repeat-button" id="repeat-schedule">Repeat last schedule</button>' : ""}
       <div class="schedule-grid">${CHARACTERS.map(scheduleCard).join("")}</div>
       <p class="form-error" id="schedule-error" role="alert"></p>
-      <button type="submit" class="button">Begin ${SEASONS[state.season]}</button>
+      <div class="planning-actions">
+        <p class="schedule-preview" id="schedule-preview" aria-live="polite"></p>
+        <button type="submit" class="button">Begin ${SEASONS[state.season]}</button>
+      </div>
     </form>`);
-  document.querySelector("#schedule-form").addEventListener("submit", submitSchedule);
+  const form = document.querySelector("#schedule-form");
+  form.addEventListener("submit", submitSchedule);
+  form.addEventListener("change", updateSchedulePreview);
+  document.querySelector("#repeat-schedule")?.addEventListener("click", () => {
+    for (const [id, activity] of Object.entries(previousSchedule)) {
+      const input = form.querySelector(`input[name="${id}"][value="${activity}"]:not(:disabled)`);
+      if (input) input.checked = true;
+    }
+    updateSchedulePreview();
+  });
+  updateSchedulePreview();
+}
+
+function activityImpact(activity) {
+  const labels = { joy: "Joy", skill: "Skill", bonds: "Bonds" };
+  const impacts = Object.entries(activity.effects.attributes || {}).filter(([, value]) => value)
+    .map(([key, value]) => `${labels[key]} ${signed(value)}`);
+  if (activity.effects.condition?.vitality) impacts.push(`Vitality ${signed(activity.effects.condition.vitality)}`);
+  for (const [key, value] of Object.entries(activity.resources || {}).filter(([, amount]) => amount)) {
+    impacts.push(`${key[0].toUpperCase() + key.slice(1)} ${signed(value)}`);
+  }
+  return impacts.map((impact) => `<em>${impact}</em>`).join("");
 }
 
 function scheduleCard(record) {
@@ -133,14 +162,33 @@ function scheduleCard(record) {
     <legend>${record.name}</legend>
     <p class="schedule-status">${character.condition.vitality}% vitality · ${record.id === "silkenTofu" ? "Gifted at community care" : "Gifted in the garden"}</p>
     <div class="activity-list">${ACTIVITIES.map((activity, index) => {
-      const needsRest = character.condition.vitality <= 15 && activity.id !== "rest";
+      const forceRest = character.condition.vitality <= 15;
+      const needsRest = forceRest && activity.id !== "rest";
+      const checked = (forceRest && activity.id === "rest") || (!forceRest && index === 0);
       return `<label class="activity-option ${needsRest ? "disabled" : ""}">
-        <input type="radio" name="${record.id}" value="${activity.id}" ${index === 0 && !needsRest ? "checked" : ""} ${needsRest ? "disabled" : ""}>
+        <input type="radio" name="${record.id}" value="${activity.id}" ${checked ? "checked" : ""} ${needsRest ? "disabled" : ""}>
         <span class="activity-icon" aria-hidden="true">${activity.icon}</span>
-        <span><b>${activity.label}</b><small>${activity.detail}</small></span>
+        <span><b>${activity.label}</b><small>${activity.detail}</small><span class="activity-impact">${activityImpact(activity)}</span></span>
       </label>`;
     }).join("")}</div>
   </fieldset>`;
+}
+
+function updateSchedulePreview() {
+  const form = document.querySelector("#schedule-form");
+  const preview = document.querySelector("#schedule-preview");
+  if (!form || !preview) return;
+  const data = new FormData(form);
+  const selected = CHARACTERS.map(({ id }) => ACTIVITIES.find((activity) => activity.id === data.get(id)));
+  if (selected.some((activity) => !activity)) {
+    preview.textContent = "Choose one activity for each friend.";
+    return;
+  }
+  const coinChange = selected.reduce((sum, activity) => sum + (activity.resources.coins || 0), 0);
+  const afterCoins = state.resources.coins + coinChange;
+  const together = selected[0].id === selected[1].id;
+  preview.classList.toggle("is-unaffordable", afterCoins < 0);
+  preview.innerHTML = `<strong>${selected.map((activity) => activity.label).join(" + ")}</strong><br>Coins ${signed(coinChange)} → ${afterCoins}${together ? " · Partnership bonus" : ""}${afterCoins < 0 ? " · Choose a cheaper plan" : ""}`;
 }
 
 function submitSchedule(event) {
@@ -158,6 +206,7 @@ function submitSchedule(event) {
   }
   try {
     applySeason(state, schedule);
+    autosave("Season complete · Progress saved");
     render();
   } catch (problem) {
     error.textContent = problem.message;
@@ -198,10 +247,11 @@ function renderMilestone(chapter) {
     <div class="milestone-banner"><p class="chapter-label">Year-end milestone</p><p class="lede">${chapter.milestone}</p></div>
     ${charactersMarkup()}
     <div class="choices">${chapter.choices.map((choice, index) => `<button type="button" class="button choice-button" data-milestone="${index}">
-      <span>${choice.label}</span><small>The consequences will carry into future seasons.</small>
+      <span>${choice.label}</span><small>${choice.hint || "The consequences will carry into future seasons."}</small>
     </button>`).join("")}</div>`);
   screen.querySelectorAll("[data-milestone]").forEach((button) => button.addEventListener("click", (event) => {
     chooseMilestone(state, Number(event.currentTarget.dataset.milestone));
+    autosave("Milestone chosen · Progress saved");
     render();
   }));
 }
@@ -214,6 +264,7 @@ function renderMilestoneResult(chapter) {
     <button type="button" class="button" id="next-chapter-button">${state.chapter === CHAPTERS.length - 1 ? "See the lives they made" : "Begin the next chapter"}</button>`);
   document.querySelector("#next-chapter-button").addEventListener("click", () => {
     beginNextChapter(state);
+    autosave("New chapter · Progress saved");
     render();
   });
 }
@@ -236,8 +287,15 @@ function restart() {
   renderTitle();
 }
 
+function autosave(message) {
+  saveState(state);
+  saveStatus.className = "save-indicator";
+  saveStatus.textContent = message;
+}
+
 saveButton.addEventListener("click", () => {
   saveState(state);
+  saveStatus.className = "save-indicator";
   saveStatus.textContent = "Life saved on this device.";
 });
 restartButton.addEventListener("click", restart);

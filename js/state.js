@@ -109,6 +109,7 @@ export function applySeason(state, schedule) {
     chapter: state.chapter,
     season: state.season,
     name: SEASONS[state.season],
+    schedule: { ...schedule },
     summaries,
     event: event ? { title: event.title, text: event.text } : null,
     changes: diff(before, snapshot(state))

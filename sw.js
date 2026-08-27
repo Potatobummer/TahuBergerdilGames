@@ -1,10 +1,12 @@
-const CACHE_NAME = 'tofu-bergerdil-games-v4';
+const CACHE_NAME = 'tofu-bergerdil-games-v5';
 const APP_SHELL = [
   './',
   './index.html',
   './styles.css',
   './manifest.webmanifest',
-  './icon.svg',
+  './assets/icons/icon-192.png',
+  './assets/icons/icon-512.png',
+  './assets/icons/apple-touch-icon.png',
   './assets/images/grandmas-kitchen.webp',
   './assets/images/silkenTofu.webp',
   './assets/images/potatoHero.webp',
