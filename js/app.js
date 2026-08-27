@@ -1,4 +1,4 @@
-import { ACTIVITIES, CHAPTERS, CHARACTERS, SEASONS, getEnding } from "./game-data.js";
+import { ACTIVITIES, CHAPTERS, CHARACTERS, FUSION_REQUIREMENTS, SEASONS, getEnding } from "./game-data.js";
 import {
   advanceSeason, applySeason, beginNextChapter, canAffordSchedule, chooseMilestone,
   clearState, createState, loadState, saveState
@@ -21,6 +21,12 @@ function headingMarkup(chapter) {
     <p class="chapter-label">Chapter ${state.chapter + 1} of ${CHAPTERS.length}</p>
     <h2 tabindex="-1">${chapter.title}</h2>
   </div>`;
+}
+
+function chapterArtMarkup(chapter, { compact = false } = {}) {
+  return `<figure class="chapter-art ${compact ? "chapter-art--compact" : ""}">
+    <img src="assets/images/${chapter.art}" alt="" width="1200" height="800">
+  </figure>`;
 }
 
 function resourcesMarkup() {
@@ -66,11 +72,11 @@ function renderTitle() {
   toolbar.hidden = true;
   const saved = loadState();
   setScreen(`<div class="title-layout">
-    <div class="title-art" role="img" aria-label="Silken Tofu and Bergie cooking together in Grandma's kitchen"></div>
+    <div class="title-art" role="img" aria-label="Silken Tofu and Bergie discover Grandma's unfinished recipe during a storm"></div>
     <div class="title-copy">
       <p class="chapter-label">A cooperative raising story</p>
       <h2 tabindex="-1">What will you make of a lifetime?</h2>
-      <p class="lede">Plan twenty seasons for Silken Tofu and Bergie. Build a kitchen, protect their friendship, and learn when nourishing others must include rest.</p>
+      <p class="lede">Raise Silken Tofu and Bergie across twenty seasons. Help them master their own signature dishes—or earn the trust and skill to complete Grandma's legendary Tofu Bergerdil.</p>
       <div class="choices">
         <button type="button" class="button" id="start-button">Begin a new life</button>
         ${saved ? '<button type="button" class="button button--quiet" id="load-button">Continue saved life</button>' : ""}
@@ -106,6 +112,7 @@ function render() {
 
 function renderDialogue(chapter) {
   setScreen(`${headingMarkup(chapter)}${resourcesMarkup()}
+    ${chapterArtMarkup(chapter)}
     <div class="story-scene"><p class="lede">${chapter.dialogue[state.dialogueIndex]}</p></div>
     ${charactersMarkup({ compact: true })}
     <button type="button" class="button" id="continue-button">Continue</button>`);
@@ -119,6 +126,7 @@ function renderDialogue(chapter) {
 function renderPlanning(chapter) {
   const previousSchedule = [...state.history].reverse().find((entry) => entry.schedule)?.schedule;
   setScreen(`${headingMarkup(chapter)}${resourcesMarkup()}${seasonsMarkup()}
+    ${state.chapter === CHAPTERS.length - 1 ? fusionReadinessMarkup() : ""}
     <div class="planning-intro">
       <p class="chapter-label">${SEASONS[state.season]}</p>
       <p>Choose one activity for each friend. Matching plans strengthen their partnership; separate plans can develop them in different ways.</p>
@@ -158,8 +166,9 @@ function activityImpact(activity) {
 
 function scheduleCard(record) {
   const character = state.characters[record.id];
-  return `<fieldset class="schedule-card">
+  return `<fieldset class="schedule-card" data-character="${record.id}">
     <legend>${record.name}</legend>
+    <img class="schedule-portrait" src="assets/images/${record.id}.webp" alt="" width="72" height="72">
     <p class="schedule-status">${character.condition.vitality}% vitality · ${record.id === "silkenTofu" ? "Gifted at community care" : "Gifted in the garden"}</p>
     <div class="activity-list">${ACTIVITIES.map((activity, index) => {
       const forceRest = character.condition.vitality <= 15;
@@ -172,6 +181,21 @@ function scheduleCard(record) {
       </label>`;
     }).join("")}</div>
   </fieldset>`;
+}
+
+function fusionReadinessMarkup() {
+  const combinedSkill = state.characters.silkenTofu.attributes.skill + state.characters.potatoHero.attributes.skill;
+  const averageVitality = Math.round((state.characters.silkenTofu.condition.vitality + state.characters.potatoHero.condition.vitality) / 2);
+  const checks = [
+    ["Partnership", state.resources.relationship, FUSION_REQUIREMENTS.relationship],
+    ["Reputation", state.resources.reputation, FUSION_REQUIREMENTS.reputation],
+    ["Combined Skill", combinedSkill, FUSION_REQUIREMENTS.combinedSkill],
+    ["Average vitality", averageVitality, FUSION_REQUIREMENTS.averageVitality]
+  ];
+  return `<aside class="fusion-readiness" aria-label="True ending readiness">
+    <div><p class="chapter-label">Tofu Bergerdil readiness</p><p>All four seals are needed for the true fusion.</p></div>
+    <ul>${checks.map(([label, value, target]) => `<li class="${value >= target ? "ready" : ""}"><span aria-hidden="true">${value >= target ? "✓" : "◇"}</span> ${label} <b>${value}/${target}</b></li>`).join("")}</ul>
+  </aside>`;
 }
 
 function updateSchedulePreview() {
@@ -244,6 +268,8 @@ function renderSeasonResult(chapter) {
 
 function renderMilestone(chapter) {
   setScreen(`${headingMarkup(chapter)}${resourcesMarkup()}
+    ${chapterArtMarkup(chapter, { compact: true })}
+    ${state.chapter === CHAPTERS.length - 1 ? fusionReadinessMarkup() : ""}
     <div class="milestone-banner"><p class="chapter-label">Year-end milestone</p><p class="lede">${chapter.milestone}</p></div>
     ${charactersMarkup()}
     <div class="choices">${chapter.choices.map((choice, index) => `<button type="button" class="button choice-button" data-milestone="${index}">
@@ -271,11 +297,13 @@ function renderMilestoneResult(chapter) {
 
 function renderEnding() {
   const ending = getEnding(state);
-  setScreen(`<div class="ending-layout">
-    <p class="chapter-label">Silken Tofu &amp; Bergie · A life shaped over ${state.history.length} seasons</p>
+  setScreen(`<div class="ending-layout" data-ending="${ending.id}">
+    <p class="chapter-label">${ending.eyebrow}</p>
     <h2 tabindex="-1">${ending.title}</h2>
+    <figure class="ending-art"><span class="transformation-flare" aria-hidden="true"></span><img src="assets/images/${ending.art}" alt="" width="1200" height="800"></figure>
     <p class="lede">${ending.text}</p>
-    ${resourcesMarkup()}${charactersMarkup()}
+    ${resourcesMarkup()}
+    <p class="ending-recap">A life shaped over ${state.history.length} seasons · Silken level ${state.characters.silkenTofu.level} · Bergie level ${state.characters.potatoHero.level}</p>
     <button type="button" class="button" id="again-button">Raise another life</button>
   </div>`);
   document.querySelector("#again-button").addEventListener("click", restart);

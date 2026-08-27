@@ -43,13 +43,13 @@ test("matching schedules strengthen the partnership and trigger a conditional ev
   state.phase = "planning";
   const relationship = state.resources.relationship;
   applySeason(state, { silkenTofu: "study", potatoHero: "study" });
-  assert.equal(state.lastSeason.event.title, "A recipe in two voices");
+  assert.equal(state.lastSeason.event.title, "Two rhythms, one chopping board");
   assert.ok(state.resources.relationship >= relationship + 5);
   assert.deepEqual(state.seenEvents, ["kitchen-duet"]);
   advanceSeason(state);
   state.resources.coins += 10;
   applySeason(state, { silkenTofu: "study", potatoHero: "study" });
-  assert.notEqual(state.lastSeason.event?.title, "A recipe in two voices");
+  assert.notEqual(state.lastSeason.event?.title, "Two rhythms, one chopping board");
 });
 
 test("rejects unaffordable schedules and requires rest when depleted", () => {
@@ -88,21 +88,32 @@ test("applies direct progression effects and unlocks level abilities", () => {
     potatoHero: { attributes: { bonds: 2 }, condition: { vitality: -80 }, progression: { experience: 1 } }
   });
   assert.equal(state.characters.silkenTofu.level, 2);
-  assert.ok(state.characters.silkenTofu.learnedAbilities.includes("Measured portion"));
+  assert.ok(state.characters.silkenTofu.learnedAbilities.includes("Crisp-edge timing"));
   assert.equal(state.characters.potatoHero.condition.status, "depleted");
 });
 
-test("produces combined vocation and partnership endings", () => {
+test("produces the earned fusion ending", () => {
   const state = createState();
   state.resources.relationship = 30;
   state.resources.reputation = 40;
+  state.characters.silkenTofu.attributes.skill = 15;
+  state.characters.potatoHero.attributes.skill = 15;
+  state.milestone = 0;
   const ending = getEnding(state);
-  assert.equal(ending.title, "The Table That Gives Back");
-  assert.match(ending.text, /Silken becomes/);
-  assert.match(ending.text, /Bergie becomes/);
+  assert.equal(ending.id, "fusion");
+  assert.equal(ending.title, "Tofu Bergerdil");
 });
 
-test("validates version-three saves and rejects older or inconsistent data", () => {
+test("produces the separate agedashi and hashbrown ending when fusion is not earned", () => {
+  const state = createState();
+  state.milestone = 1;
+  const ending = getEnding(state);
+  assert.equal(ending.id, "separate");
+  assert.match(ending.title, /Agedashi Silken/);
+  assert.match(ending.title, /Hashbrown Bergie/);
+});
+
+test("validates version-four saves and rejects older or inconsistent data", () => {
   const state = createState();
   assert.equal(isValidState(state), true);
   assert.deepEqual(loadState(storageFor(state)), state);

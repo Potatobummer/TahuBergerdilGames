@@ -1,9 +1,10 @@
 # Tofu Bergerdil Games
 
-**Tofu Bergerdil Games** is a cooperative browser raising game about Silken Tofu and
-Bergie the Potato Hero learning to nourish their neighbours without losing themselves.
-Guide both friends across five chapters and twenty seasons. Plan their work, study,
-rest, and community life while protecting the partnership that holds them together.
+**Tofu Bergerdil Games** is a cooperative browser raising game about two living
+ingredients trying to complete Grandma's unfinished festival recipe. Guide Silken
+Tofu and Bergie the Potato Hero across five illustrated chapters and twenty seasons.
+They can mature into Agedashi Silken and Hashbrown Bergie—or earn the true ending by
+building enough trust, craft, reputation, and vitality to fuse into Tofu Bergerdil.
 
 ## Play online
 
@@ -19,8 +20,8 @@ it like an app.
 3. Balance coins, reputation, partnership, individual attributes, and vitality.
 4. Respond to seasonal events created by the pair's condition and earlier plans.
 5. After four seasons, face a milestone whose consequences carry into later chapters.
-6. Complete all five chapters to discover both individual vocations and their shared
-   future.
+6. Complete all five chapters to reveal their separate dish evolutions or the true
+   Tofu Bergerdil fusion ending.
 
 Matching schedules strengthen the partnership, while separate schedules can develop
 different strengths. A depleted character must rest. Conditional events only occur
@@ -50,4 +51,5 @@ npm test
 
 The source keeps story and simulation data in `js/game-data.js`, state transitions
 and save validation in `js/state.js`, and browser rendering in `js/app.js`. Original
-storybook artwork is stored in `assets/images` and cached for offline play.
+storybook chapter and ending artwork is stored in `assets/images` and cached for
+offline play. Interface motion respects the device's reduced-motion preference.

@@ -46,13 +46,18 @@ p { line-height: 1.65; }
 .chapter-heading { margin-bottom: 1rem; }
 
 .title-layout { display: grid; grid-template-columns: minmax(16rem, .85fr) 1fr; min-height: 33rem; margin: calc(clamp(1.2rem, 4vw, 2.5rem) * -1); }
-.title-art { min-height: 25rem; background: linear-gradient(0deg, #1b120688, transparent), url("assets/images/grandmas-kitchen.webp") center/cover; }
+.title-art { min-height: 25rem; background: linear-gradient(0deg, #1b120688, transparent), url("assets/images/chapter-awakening.webp") center/cover; }
 .title-copy { align-self: center; padding: clamp(2rem, 6vw, 4rem); }
 
 .resources { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1rem 0 1.4rem; }
 .resources span { padding: .55rem .75rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: #17120dbb; }
 .resources b { color: var(--cream); }
 .story-scene, .milestone-banner { padding: 1rem 1.2rem; border-left: .3rem solid var(--gold); background: #17120d99; }
+.chapter-art { position: relative; overflow: hidden; margin: 0 0 1.2rem; border: 1px solid var(--line); border-radius: .9rem; background: #17120d; box-shadow: 0 1rem 2.5rem #0007; }
+.chapter-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, #17120d99); pointer-events: none; }
+.chapter-art img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.chapter-art--compact { max-height: 22rem; }
+.chapter-art--compact img { max-height: 22rem; }
 
 .character-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0; }
 .character-panel { position: relative; display: grid; grid-template-columns: 8rem 1fr; gap: 1rem; overflow: hidden; padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; background: linear-gradient(135deg, #2d241a, var(--panel)); }
@@ -81,9 +86,12 @@ p { line-height: 1.65; }
 .season-track .current span { border-color: var(--gold); }
 
 .schedule-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; }
-.schedule-card { min-width: 0; padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; }
+.schedule-card { position: relative; min-width: 0; padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; }
 .schedule-card legend { padding: 0 .4rem; color: var(--gold); font-size: 1.2rem; font-weight: 700; }
-.schedule-status { margin-top: 0; color: var(--muted); font-size: .86rem; }
+.schedule-portrait { float: right; width: 3.75rem; height: 3.75rem; margin: -.35rem 0 .5rem .65rem; border: 2px solid #a7895f; border-radius: 50%; object-fit: cover; box-shadow: 0 .4rem 1rem #0008; }
+.schedule-card[data-character="silkenTofu"] { border-top-color: #dba7a3; }
+.schedule-card[data-character="potatoHero"] { border-top-color: #72865d; }
+.schedule-status { min-height: 2.6rem; margin-top: 0; color: var(--muted); font-size: .86rem; }
 .activity-list { display: grid; gap: .55rem; }
 .activity-option { display: grid; grid-template-columns: auto 2rem 1fr; gap: .65rem; align-items: center; padding: .7rem; border: 1px solid var(--line); border-radius: .6rem; cursor: pointer; background: #17120d80; }
 .activity-option:has(input:checked) { border-color: var(--gold); background: #5b411d66; box-shadow: inset 0 0 0 1px var(--gold); }
@@ -99,6 +107,12 @@ p { line-height: 1.65; }
 .schedule-preview strong { color: var(--cream); }
 .schedule-preview.is-unaffordable { color: #ffb4a5; }
 .repeat-button { margin-bottom: .4rem; padding: .5rem .7rem; font-size: .82rem; }
+.fusion-readiness { display: grid; grid-template-columns: 1fr 1.35fr; gap: 1rem; align-items: center; margin: 1rem 0 1.4rem; padding: 1rem; border: 1px solid #8c6a32; border-radius: .8rem; background: linear-gradient(135deg, #6a4b1f44, #17120d); }
+.fusion-readiness p { margin: .2rem 0; }
+.fusion-readiness ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; margin: 0; padding: 0; list-style: none; }
+.fusion-readiness li { padding: .5rem .65rem; border: 1px solid var(--line); border-radius: .5rem; color: var(--muted); background: #17120d99; font-size: .82rem; }
+.fusion-readiness li b { float: right; color: var(--cream); }
+.fusion-readiness li.ready { color: #bce9bd; border-color: #5e8a61; background: #253326aa; }
 
 .result-activities { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
 .result-activities p { margin: 0; padding: .8rem; border: 1px solid var(--line); border-radius: .6rem; }
@@ -121,11 +135,20 @@ p { line-height: 1.65; }
 .toolbar { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; padding-top: 1rem; }
 #save-status { color: var(--muted); font-size: .9rem; }
 .save-indicator::before { content: "✓ "; color: var(--green); }
+.ending-layout { text-align: center; }
+.ending-layout > .lede { max-width: 54rem; margin: 1.2rem auto; }
+.ending-layout .resources { justify-content: center; }
+.ending-art { position: relative; overflow: hidden; margin: 1.2rem 0; border: 1px solid #8c6a32; border-radius: 1rem; background: #17120d; box-shadow: 0 1.5rem 4rem #000a; }
+.ending-art img { position: relative; z-index: 1; display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.ending-layout[data-ending="fusion"] .ending-art { border-color: var(--gold); box-shadow: 0 0 2rem #f5bd5655, 0 1.5rem 4rem #000a; }
+.transformation-flare { position: absolute; inset: 20%; border-radius: 50%; background: #f5bd5688; filter: blur(2rem); }
+.ending-recap { color: var(--muted); font-size: .9rem; }
 
 @media (max-width: 50rem) {
   .title-layout { grid-template-columns: 1fr; }
   .title-art { min-height: 17rem; }
   .schedule-grid, .character-panels { grid-template-columns: 1fr; }
+  .fusion-readiness { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 32rem) {
@@ -140,11 +163,28 @@ p { line-height: 1.65; }
   .stats strong { display: inline; }
   .season-track { font-size: .66rem; }
   .result-activities, .season-changes { grid-template-columns: 1fr; }
+  .fusion-readiness ul { grid-template-columns: 1fr; }
   .planning-actions { grid-template-columns: 1fr; bottom: calc(.35rem + env(safe-area-inset-bottom, 0)); }
   .planning-actions .button { width: 100%; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .card { animation: arrive .28s ease-out; }
+  .chapter-art img { animation: story-breathe 9s ease-in-out infinite alternate; }
+  .portrait, .schedule-portrait { animation: portrait-breathe 3.6s ease-in-out infinite; }
+  .character-panel:nth-child(2) .portrait, .schedule-card:nth-child(2) .schedule-portrait { animation-delay: -1.8s; }
+  .activity-option:has(input:checked) { animation: choice-set .24s ease-out; }
+  .event-card { animation: event-reveal .5s ease-out; }
+  .season-changes .gain { animation: gain-rise .45s ease-out both; }
+  .ending-art { animation: ending-reveal .9s cubic-bezier(.2, .8, .2, 1) both; }
+  .ending-layout[data-ending="fusion"] .transformation-flare { animation: fusion-glow 2.4s ease-in-out infinite alternate; }
+  progress::-webkit-progress-value { transition: width .6s ease; }
   @keyframes arrive { from { opacity: 0; transform: translateY(.4rem); } }
+  @keyframes story-breathe { from { transform: scale(1.005); } to { transform: scale(1.035); } }
+  @keyframes portrait-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-.18rem); } }
+  @keyframes choice-set { 50% { transform: scale(1.012); } }
+  @keyframes event-reveal { from { opacity: 0; transform: translateY(.6rem) scale(.99); } }
+  @keyframes gain-rise { from { opacity: 0; transform: translateY(.35rem); } }
+  @keyframes ending-reveal { from { opacity: 0; transform: scale(.96); filter: brightness(1.8); } }
+  @keyframes fusion-glow { from { opacity: .35; transform: scale(.8); } to { opacity: .85; transform: scale(1.15); } }
 }

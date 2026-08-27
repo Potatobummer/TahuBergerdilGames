@@ -2,39 +2,39 @@ export const CHARACTERS = [
   {
     id: "silkenTofu",
     name: "Silken Tofu",
-    origin: "Pressed from moon-soaked soybeans in Grandma's kitchen.",
-    motivation: "Make gentle food that leaves lonely people feeling held.",
+    origin: "Awakened from the silken tofu half of Grandma's unfinished festival recipe.",
+    motivation: "Master heat without losing the gentle centre that makes her Silken.",
     personality: ["patient", "inventive", "tender-hearted"],
     startingAge: 7,
-    role: "The gentle healer · Guardian of Grandma's restorative recipes",
+    role: "The gentle healer · Keeper of softness, broth, and balance",
     attributes: { joy: 2, skill: 1, bonds: 3 },
     growth: { joy: 2, skill: 1, bonds: 2 },
-    startingAbility: "Cooling touch",
+    startingAbility: "Gentle broth",
     arc: [
-      "Silken first offers a spoonful of their soft centre to a hungry classmate and discovers that shared food carries comfort.",
-      "As the stall grows, every serving thins Silken's body and blurs one treasured kitchen memory.",
-      "Grandma teaches Silken to rest overnight in fresh soy milk; care, sleep, and remembered stories restore substance and memory.",
-      "Silken learns that generosity needs consent and limits, sharing measured portions instead of disappearing for applause.",
-      "At the feast, Silken creates a living starter: nourishment freely given returns through a community that cooks and cares in turn."
+      "Silken wakes beside Grandma's unfinished recipe and worries that combining with Bergie would erase her delicate identity.",
+      "She learns that hot oil can create a golden edge while protecting the soft centre within.",
+      "A failed fusion teaches her that gentleness needs structure, timing, and honest limits.",
+      "Silken stops treating cooperation as disappearance and begins designing a shared centre both friends can shape.",
+      "At the final stove, she must choose between becoming Agedashi Silken or joining Bergie as something neither could become alone."
     ]
   },
   {
     id: "potatoHero",
     name: "Bergie the Potato Hero",
-    origin: "Sprouted beneath the football field from a golden potato Grandma planted.",
-    motivation: "Give people enough strength to stand up, work together, and come home.",
+    origin: "Sprouted from the grated potato half of Grandma's unfinished festival recipe.",
+    motivation: "Become strong enough to hold a dish together without hardening against everyone around him.",
     personality: ["brave", "boisterous", "loyal"],
     startingAge: 8,
-    role: "The stalwart gardener · Loyal protector of the shared table",
+    role: "The stalwart gardener · Keeper of crispness, structure, and courage",
     attributes: { joy: 3, skill: 2, bonds: 1 },
     growth: { joy: 1, skill: 2, bonds: 2 },
-    startingAbility: "Starch shield",
+    startingAbility: "Starch guard",
     arc: [
-      "Bergie tears off a small golden piece to feed an exhausted player and realizes courage can be passed from body to body.",
-      "Repeated gifts leave dents in Bergie's armour, heavy fatigue, and roots too weak to hold the soil.",
-      "Bergie recovers by rooting in Grandma's compost beds through a full rain cycle; shared meals and unhurried seasons regrow each piece.",
-      "Bergie stops treating pain as proof of heroism and asks friends to guard the garden while recovery takes its proper time.",
-      "At the feast, Bergie's returned peelings seed a cooperative patch, making sacrifice renewable rather than solitary."
+      "Bergie wakes beside Grandma's unfinished recipe certain that strength means becoming the crispiest hero on his own.",
+      "He learns that a good crust needs moisture, patience, and a centre worth protecting.",
+      "A failed fusion teaches him that pressing harder cannot force two ingredients to bind.",
+      "Bergie learns to support Silken's softness instead of armouring over it.",
+      "At the final stove, he must choose between becoming Hashbrown Bergie or sharing his golden crust with a new fused form."
     ]
   }
 ];
@@ -48,32 +48,32 @@ export const SEASONS = ["Early Rain", "High Sun", "Harvest Wind", "Long Night"];
 
 export const ACTIVITIES = [
   {
-    id: "study", label: "Kitchen lessons", icon: "🥄",
-    detail: "Build Skill and experience. Tuition costs 4 coins.",
+    id: "study", label: "Recipe lessons", icon: "🥄",
+    detail: "Build Skill and experience. Ingredients cost 4 coins.",
     effects: gain({ skill: 2, joy: -1 }, -5, 2), resources: { coins: -4 }
   },
   {
-    id: "stall", label: "Run the food stall", icon: "🍜",
-    detail: "Earn 8 coins and reputation, but serving is tiring.",
+    id: "stall", label: "Run a taste-test stall", icon: "🍽️",
+    detail: "Earn 8 coins and reputation, but service is tiring.",
     effects: gain({ bonds: 1 }, -12, 2), resources: { coins: 8, reputation: 2 }
   },
   {
-    id: "community", label: "Community kitchen", icon: "🫂",
+    id: "community", label: "Host a community tasting", icon: "🥣",
     detail: "Deepen Bonds and reputation. Ingredients cost 2 coins.",
     effects: gain({ bonds: 2 }, -8, 2), resources: { coins: -2, reputation: 4, relationship: 1 }
   },
   {
-    id: "play", label: "Play and explore", icon: "🌦️",
-    detail: "Restore Joy and discover the neighbourhood.",
+    id: "play", label: "Explore new flavours", icon: "🌦️",
+    detail: "Restore Joy and discover surprising combinations.",
     effects: gain({ joy: 3 }, -3, 1), resources: { coins: -1 }
   },
   {
-    id: "garden", label: "Tend the garden", icon: "🌱",
+    id: "garden", label: "Harvest binding ingredients", icon: "🌱",
     detail: "Grow ingredients, Skill, and Bonds at a gentle pace.",
     effects: gain({ skill: 1, bonds: 1 }, -6, 2), resources: { coins: 3, reputation: 1 }
   },
   {
-    id: "rest", label: "Rest with Grandma", icon: "🌙",
+    id: "rest", label: "Rest at low heat", icon: "🌙",
     detail: "Recover vitality and Joy. No income this season.",
     effects: gain({ joy: 1 }, 24, 0), resources: { reputation: -1 }
   }
@@ -81,154 +81,155 @@ export const ACTIVITIES = [
 
 export const SEASON_EVENTS = [
   {
-    id: "kitchen-duet", title: "A recipe in two voices",
+    id: "kitchen-duet", title: "Two rhythms, one chopping board",
     when: (state, plans) => plans.every((id) => id === "study"),
-    text: "Grandma notices that Silken seasons by listening while Bergie measures by instinct. Together they invent a fritter neither could make alone.",
+    text: "Silken listens for the broth's quiet simmer while Bergie counts every crisp edge. Grandma writes both timings into the same recipe.",
     effects: effects(gain({ skill: 1 }, 0, 1), gain({ skill: 1 }, 0, 1)), resources: { relationship: 3 }
   },
   {
-    id: "market-rush", title: "The queue around the field",
+    id: "market-rush", title: "Fans of two different dishes",
     when: (state, plans) => plans.every((id) => id === "stall"),
-    text: "The stall sells out before sunset. The applause feels wonderful, but both friends return home with trembling hands.",
+    text: "Customers form one queue for Silken's delicate bowls and another for Bergie's crunchy bites. Success makes their separate futures feel suddenly possible.",
     effects: effects(gain({ joy: 1 }, -5), gain({ joy: 1 }, -5)), resources: { coins: 6, reputation: 4 }
   },
   {
-    id: "shared-table", title: "Everyone brings a bowl",
+    id: "shared-table", title: "The missing binder",
     when: (state, plans) => plans.every((id) => id === "community"),
-    text: "Neighbours arrive with vegetables, stories, and an insistence on washing the dishes. Care begins to travel in both directions.",
+    text: "A neighbour adds scallions and soy to the test batter. It holds together longer than before: proof that a recipe can be shared without losing its makers.",
     effects: effects(gain({ bonds: 1 }, 4), gain({ bonds: 1 }, 4)), resources: { relationship: 4, reputation: 3 }
   },
   {
-    id: "permission-to-rest", title: "Keeping watch",
+    id: "permission-to-rest", title: "Keeping the flame low",
     when: (state, plans) => plans.filter((id) => id === "rest").length === 1,
-    text: "The working friend returns early with supper. Rest stops feeling like abandonment and starts becoming something they protect for one another.",
+    text: "The working friend tends the stove quietly so the resting friend can recover. For once, progress means refusing to rush the recipe.",
     effects: {}, resources: { relationship: 2 }
   },
   {
-    id: "grandmas-warning", title: "Grandma closes the shutters",
+    id: "grandmas-warning", title: "The batter begins to split",
     when: (state) => Object.values(state.characters).some(({ condition }) => condition.vitality <= 30),
-    text: "Grandma sees the signs of depletion and closes the stall for an evening, regardless of the waiting customers.",
+    text: "Grandma stops the trial. An exhausted ingredient cannot bind cleanly; forcing the transformation now would ruin both dishes.",
     effects: effects(gain({}, 10), gain({}, 10)), resources: { reputation: -2, relationship: 1 }
   },
   {
-    id: "neighbourhood-pantry", title: "The pantry that answers back",
+    id: "neighbourhood-pantry", title: "Ingredients returned",
     when: (state) => state.resources.coins <= 5 && state.resources.reputation >= 8,
-    text: "People who remember being fed quietly leave rice, soybeans, and potatoes by the kitchen door.",
+    text: "Former tasters leave soy, potatoes, dashi, and scallions at Grandma's door. A beloved recipe never belongs to only one kitchen.",
     effects: {}, resources: { coins: 8, relationship: 1 }
   },
   {
-    id: "local-heroes", title: "A name on every noticeboard",
+    id: "local-heroes", title: "The Hearth Festival invitation",
     when: (state) => state.resources.reputation >= 24,
-    text: "The neighbourhood now knows them by name. New invitations arrive, along with expectations they will have to learn to manage.",
+    text: "The festival asks for one signature dish. Silken and Bergie must decide whether that means two plates—or one true Tofu Bergerdil.",
     effects: effects(gain({ bonds: 1 }), gain({ bonds: 1 })), resources: { coins: 4 }
   },
   {
-    id: "unhurried-friendship", title: "An evening with nowhere to be",
+    id: "unhurried-friendship", title: "Steam between two bowls",
     when: (state) => state.resources.relationship >= 18,
-    text: "They sit beneath the awning without fixing anything. The silence itself becomes proof that their friendship is more than shared work.",
+    text: "They taste each other's work without judging it. Silken understands Bergie's crunch; Bergie finally notices the strength inside Silken's softness.",
     effects: effects(gain({ joy: 2 }, 5), gain({ joy: 2 }, 5)), resources: {}
   }
 ];
 
 export const CHAPTERS = [
   {
-    ageOffset: 0, arcStage: 0, title: "The First Sharing",
-    dialogue: ["Rain drums on Grandma's awning as Silken Tofu and Bergie shape their first fritter together.", "A hungry classmate arrives. Both friends wonder whether food can carry a piece of the giver's care."],
-    activities: [
-      { label: "Practise side by side", detail: "Both gain Skill; Silken builds Bonds", effects: effects(gain({ skill: 2, bonds: 1 }), gain({ skill: 2, joy: 1 })) },
-      { label: "Play in the rain", detail: "Both gain Joy and recover", effects: effects(gain({ joy: 2 }, 4), gain({ joy: 2 }, 4)) }
+    ageOffset: 0, arcStage: 0, art: "chapter-awakening.webp", title: "The Recipe With Two Names",
+    dialogue: [
+      "On the night before Grandma closes her old stall, lightning strikes the kitchen and wakes two ingredients from her unfinished recipe: Silken Tofu and Bergie.",
+      "The faded card names a dish no one has ever tasted—Tofu Bergerdil. Silken wonders whether it means becoming one dish together. Bergie thinks it may simply mean two heroes sharing a plate. Grandma gives them twenty seasons to discover the answer."
     ],
-    milestone: "Who offers the first nourishing portion?",
+    milestone: "Their first test batter will only hold one flavour clearly. Whose identity should lead?",
     choices: [
-      { label: "Silken shares a tender spoonful", hint: "Silken gains stronger Bonds and learns a caring ability, but loses more vitality.", result: "The classmate feels understood; Silken feels the strange cost of becoming a little less solid.", effects: effects(gain({ bonds: 3 }, -12, 2, "Comforting portion"), gain({ bonds: 1 }, 0, 1)) },
-      { label: "Bergie shares a golden piece", hint: "Bergie gains stronger Bonds and learns a brave ability, but loses more vitality.", result: "Strength returns to the classmate; a dent remains in Bergie's brave armour.", effects: effects(gain({ bonds: 1 }, 0, 1), gain({ bonds: 3 }, -12, 2, "Courage portion")) }
+      { label: "Let Silken set the gentle centre", hint: "Silken gains Bonds and the Soft centre ability; Bergie learns to support.", result: "The fritter is delicate and fragrant. Bergie discovers that protecting softness can be its own kind of strength.", effects: effects(gain({ bonds: 3 }, -4, 2, "Soft centre"), gain({ bonds: 1 }, 0, 1)) },
+      { label: "Let Bergie build the golden crust", hint: "Bergie gains Skill and the Golden lattice ability; Silken learns to trust structure.", result: "The fritter crackles without breaking. Silken discovers that a firm edge does not have to erase what is tender inside.", effects: effects(gain({ bonds: 1 }, 0, 1), gain({ skill: 3 }, -4, 2, "Golden lattice")) }
     ]
   },
   {
-    ageOffset: 2, arcStage: 1, title: "A Stall for Two",
-    dialogue: ["The Saturday stall draws a queue beside the football field.", "Every nourishing serving helps a neighbour, yet Silken grows translucent and Bergie's roots begin to ache."],
-    activities: [
-      { label: "Remember every regular", detail: "Both deepen their Bonds", effects: effects(gain({ bonds: 2 }), gain({ bonds: 2 })) },
-      { label: "Share the cooking work", detail: "Both gain Skill with a smaller cost", effects: effects(gain({ skill: 2 }, -3), gain({ skill: 2 }, -3)) }
-    ], milestone: "A soaked team needs more food than either friend can safely give.",
+    ageOffset: 2, arcStage: 1, art: "chapter-two-paths.webp", title: "Two Paths Through the Oil",
+    dialogue: [
+      "Years of practice reveal two obvious futures. Silken could become elegant agedashi tofu; Bergie could become a fearless hash brown with a perfect golden lattice.",
+      "Their separate dishes delight the market, yet the unfinished Tofu Bergerdil card keeps appearing between them on Grandma's shelf."
+    ],
+    milestone: "A food critic offers to train only one signature dish at a time.",
     choices: [
-      { label: "Set a portion limit", hint: "Safer recovery for both, plus two new boundary-focused abilities.", result: "They feed everyone by asking the neighbourhood to contribute ingredients too.", effects: effects(gain({ bonds: 2 }, -5, 2, "Gentle boundary"), gain({ bonds: 2 }, -5, 2, "Garden muster")) },
-      { label: "Give until the trays are full", hint: "More Bonds now, with a much heavier vitality cost for both.", result: "Everyone eats, but their friends must carry the exhausted pair home.", effects: effects(gain({ bonds: 3 }, -15, 2), gain({ bonds: 3 }, -15, 2)) }
+      { label: "Alternate lessons and share every note", hint: "A balanced path: both gain Bonds, recovery, and shared techniques.", result: "Each lesson returns to the kitchen as a conversation. Their separate talents begin to fit together instead of competing.", effects: effects(gain({ bonds: 2 }, -5, 2, "Dashi timing"), gain({ bonds: 2 }, -5, 2, "Crisp-edge timing")) },
+      { label: "Train separately and compare results", hint: "Faster Skill growth, but a larger vitality cost and no shared ability.", result: "Their individual dishes improve quickly. So does the distance between their cooking rhythms.", effects: effects(gain({ skill: 3 }, -12, 2), gain({ skill: 3 }, -12, 2)) }
     ]
   },
   {
-    ageOffset: 4, arcStage: 2, title: "The Recovery Recipe",
-    dialogue: ["Grandma refuses to let sacrifice become a performance.", "She prepares soy milk for Silken and compost beds for Bergie, explaining that regeneration requires rest and care freely returned."],
-    activities: [
-      { label: "Rest through the rain cycle", detail: "Bergie recovers deeply; Silken keeps watch", effects: effects(gain({ bonds: 2 }, 8), gain({ joy: 1 }, 22, 2, "Rain-root renewal")) },
-      { label: "Trade stories over soy milk", detail: "Silken recovers deeply; Bergie keeps watch", effects: effects(gain({ joy: 1 }, 22, 2, "Soy-milk renewal"), gain({ bonds: 2 }, 8)) }
-    ], milestone: "The lunch bell rings before recovery is complete.",
+    ageOffset: 4, arcStage: 2, art: "chapter-failed-batter.webp", title: "The Batter That Broke",
+    dialogue: [
+      "Silken and Bergie attempt the unfinished recipe for the first time. Bergie presses too hard, Silken adds broth too quickly, and the patty tears apart in the oil.",
+      "Neither is ruined, but both are shaken. Grandma explains that fusion is not a shortcut to greatness; two complete selves must choose the same transformation at the same pace."
+    ],
+    milestone: "How will they study the failed batter?",
     choices: [
-      { label: "Trust friends to serve today", hint: "Larger Bonds gain and stronger recovery for both heroes.", result: "The stall survives without consuming its heroes, and both learn that receiving care is part of giving it.", effects: effects(gain({ bonds: 3 }, 12, 2), gain({ bonds: 3 }, 12, 2)) },
-      { label: "Teach the recovery recipe", hint: "Larger Skill gain with solid recovery for both heroes.", result: "Customers become caretakers and prepare the beds and milk for tomorrow.", effects: effects(gain({ skill: 2 }, 10, 2), gain({ skill: 2 }, 10, 2)) }
+      { label: "Name what each of them needed", hint: "Stronger Bonds and deeper recovery for both.", result: "Silken admits she feared disappearing. Bergie admits he feared being unnecessary. The next batter begins with honesty instead of force.", effects: effects(gain({ bonds: 3 }, 14, 2), gain({ bonds: 3 }, 14, 2)) },
+      { label: "Measure every technical mistake", hint: "Stronger Skill and solid recovery for both.", result: "They chart temperature, moisture, pressure, and timing. The failure becomes a recipe they can actually learn from.", effects: effects(gain({ skill: 3 }, 10, 2), gain({ skill: 3 }, 10, 2)) }
     ]
   },
   {
-    ageOffset: 6, arcStage: 3, title: "Consent at the Table",
-    dialogue: ["A city contest praises endless giving, but the old ache returns.", "Silken names the memories at risk; Bergie admits that even heroes fear failing to regrow."],
-    activities: [
-      { label: "Design nourishing substitutes", detail: "Both grow in Skill", effects: effects(gain({ skill: 3 }), gain({ skill: 3 })) },
-      { label: "Write a rest rota", detail: "Both recover and strengthen Bonds", effects: effects(gain({ bonds: 2 }, 10), gain({ bonds: 2 }, 10)) }
-    ], milestone: "Judges demand a dramatic sacrifice for the final plate.",
+    ageOffset: 6, arcStage: 3, art: "chapter-shared-recipe.webp", title: "One Stall, Three Possibilities",
+    dialogue: [
+      "The Hearth Festival invites them to present a signature dish. Agedashi Silken would be graceful. Hashbrown Bergie would be mighty. A true Tofu Bergerdil could become the dish Grandma never managed to finish.",
+      "The choice is no longer about which form is better. It is about whether they have built enough trust to choose transformation without losing themselves."
+    ],
+    milestone: "What will they promise before the final year of training?",
     choices: [
-      { label: "Say no and explain the cost", hint: "Joy, Bonds, vitality, and the Clear consent ability for both.", result: "Their boundary changes the contest rules: no meal may require an unwilling giver.", effects: effects(gain({ joy: 2, bonds: 2 }, 5, 2, "Clear consent"), gain({ joy: 2, bonds: 2 }, 5, 2, "Clear consent")) },
-      { label: "Offer one measured portion each", hint: "More Skill for both, at a measured vitality cost.", result: "They choose the gift together, then schedule the recovery it demands.", effects: effects(gain({ skill: 2 }, -7, 2), gain({ skill: 2 }, -7, 2)) }
+      { label: "Neither changes unless both are ready", hint: "Joy, Bonds, recovery, and the Shared consent ability for both.", result: "They write the promise across the top of Grandma's recipe card. Fusion becomes an invitation, never an obligation.", effects: effects(gain({ joy: 2, bonds: 2 }, 6, 2, "Shared consent"), gain({ joy: 2, bonds: 2 }, 6, 2, "Shared consent")) },
+      { label: "Perfect both separate dishes first", hint: "More Skill for both, with a measured vitality cost.", result: "They master agedashi and hash brown techniques. If they fuse, it will be as accomplished dishes—not unfinished ingredients.", effects: effects(gain({ skill: 3 }, -6, 2), gain({ skill: 3 }, -6, 2)) }
     ]
   },
   {
-    ageOffset: 9, arcStage: 4, title: "The Regenerating Feast",
-    dialogue: ["Years of returned care have filled a garden and a vat with living starters.", "Silken and Bergie can finally nourish the neighbourhood without carrying the whole cost alone."],
-    activities: [
-      { label: "Plant the cooperative patch", detail: "Bergie leads; Silken gathers neighbours", effects: effects(gain({ bonds: 3 }), gain({ skill: 3 }, 5, 2, "Seed-the-future")) },
-      { label: "Culture the living starter", detail: "Silken leads; Bergie protects the kitchen", effects: effects(gain({ skill: 3 }, 5, 2, "Living starter"), gain({ bonds: 3 })) }
-    ], milestone: "What promise will guide every future feast?",
+    ageOffset: 9, arcStage: 4, art: "chapter-final-sizzle.webp", title: "The Final Sizzle",
+    dialogue: [
+      "The festival lanterns ignite. Silken prepares dashi, flowers, and a tender tofu centre. Bergie grates the harvest, folds a crisp lattice, and steadies the pan with his shield.",
+      "Grandma places the blank final line of her recipe between them. Whatever enters the oil tonight will decide the form of their adult lives."
+    ],
+    milestone: "Which dish will step from the final pan?",
     choices: [
-      { label: "Care must return to its givers", hint: "A final Bonds-focused promise with deep recovery.", result: "Every guest tends the sources that fed them; recovery becomes a shared ritual.", effects: effects(gain({ bonds: 3 }, 15, 3), gain({ bonds: 3 }, 15, 3)) },
-      { label: "No one nourishes alone", hint: "A final Joy-focused promise with deep recovery.", result: "Many small, willing gifts make a table where neither friend has to vanish.", effects: effects(gain({ joy: 3 }, 15, 3), gain({ joy: 3 }, 15, 3)) }
+      { label: "Choose each other: become Tofu Bergerdil", hint: "True fusion requires 24 partnership, 18 reputation, 30 combined Skill, and 35% average vitality.", result: "They fold softness into strength and strength around softness. The batter holds—but only a life of shared choices can complete the transformation.", effects: effects(gain({ bonds: 3 }, 10, 3), gain({ bonds: 3 }, 10, 3)) },
+      { label: "Choose two complete signature dishes", hint: "Silken becomes agedashi tofu and Bergie becomes a heroic hash brown.", result: "They choose neighbouring pans and cheer for each other's transformation. Two aromas rise together beneath the same festival lanterns.", effects: effects(gain({ joy: 3 }, 10, 3), gain({ joy: 3 }, 10, 3)) }
     ]
   }
 ];
 
-const VOCATIONS = {
-  silkenTofu: {
-    joy: "a storyteller whose playful dishes recover forgotten memories",
-    skill: "a master of living starters and restorative recipes",
-    bonds: "a patient teacher who makes every kitchen feel like home"
-  },
-  potatoHero: {
-    joy: "a travelling field cook who turns every match into a feast",
-    skill: "a fearless grower who makes exhausted soil abundant again",
-    bonds: "an organiser who can rally a whole neighbourhood before breakfast"
-  }
+export const FUSION_REQUIREMENTS = {
+  relationship: 24,
+  reputation: 18,
+  combinedSkill: 30,
+  averageVitality: 35
 };
 
-function strongestAttribute(character) {
-  return Object.entries(character.attributes).sort(([, left], [, right]) => right - left)[0][0];
-}
-
 export function getEnding(state) {
-  const silken = VOCATIONS.silkenTofu[strongestAttribute(state.characters.silkenTofu)];
-  const bergie = VOCATIONS.potatoHero[strongestAttribute(state.characters.potatoHero)];
-  const averageVitality = Object.values(state.characters).reduce((sum, character) => sum + character.condition.vitality, 0) / 2;
-  let title = "The Two Roads Home";
-  let shared = "They follow different callings, meeting often enough to remember why the first fritter mattered.";
-  if (averageVitality <= 30) {
-    title = "The Kitchen That Finally Closed";
-    shared = "Their generosity outran their recovery. The neighbourhood closes the stall for a season and, at last, learns to feed its exhausted cooks.";
-  } else if (state.resources.relationship >= 28 && state.resources.reputation >= 35) {
-    title = "The Table That Gives Back";
-    shared = "Their partnership becomes a cooperative where every guest returns care to its source.";
-  } else if (state.resources.relationship >= 28) {
-    title = "The Unhurried Partnership";
-    shared = "They choose a smaller table and protect the time required to remain friends as well as heroes.";
-  } else if (state.resources.reputation >= 35) {
-    title = "The Neighbourhood's Kitchen";
-    shared = "Their work belongs to the whole neighbourhood now, supported by many hands instead of two disappearing bodies.";
+  const silken = state.characters.silkenTofu;
+  const bergie = state.characters.potatoHero;
+  const averageVitality = (silken.condition.vitality + bergie.condition.vitality) / 2;
+  const combinedSkill = silken.attributes.skill + bergie.attributes.skill;
+  const attemptedFusion = state.milestone === 0;
+  const readyToFuse = attemptedFusion &&
+    state.resources.relationship >= FUSION_REQUIREMENTS.relationship &&
+    state.resources.reputation >= FUSION_REQUIREMENTS.reputation &&
+    combinedSkill >= FUSION_REQUIREMENTS.combinedSkill &&
+    averageVitality >= FUSION_REQUIREMENTS.averageVitality;
+
+  if (readyToFuse) {
+    return {
+      id: "fusion",
+      eyebrow: "True ending · The completed recipe",
+      title: "Tofu Bergerdil",
+      art: "ending-fusion.webp",
+      text: "Silken's tender centre and Bergie's golden lattice become one living fritter hero: crisp enough to stand, soft enough to heal, and still carrying both of their voices. Grandma finally writes the last line of her recipe—not 'mix until identical,' but 'choose one another, and leave room for both.'"
+    };
   }
-  return { title, text: `${shared} Silken becomes ${silken}. Bergie becomes ${bergie}.` };
+
+  const reason = attemptedFusion
+    ? "Their final batter cannot yet hold every part of them, so they release it and choose forms that let both heroes remain whole."
+    : "They choose to grow side by side, complete without needing to become the same dish.";
+  return {
+    id: "separate",
+    eyebrow: attemptedFusion ? "Honest ending · Not ready to fuse" : "Signature ending · Two complete dishes",
+    title: "Agedashi Silken & Hashbrown Bergie",
+    art: "ending-separate.webp",
+    text: `${reason} Silken becomes Agedashi Silken, wrapped in a light golden robe with a restorative dashi heart. Bergie becomes Hashbrown Bergie, a brave lattice of crisp potato protecting a warm centre. Their two plates are always served together.`
+  };
 }

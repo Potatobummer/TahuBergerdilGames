@@ -1,6 +1,6 @@
 import { ACTIVITIES, CHAPTERS, CHARACTERS, SEASON_EVENTS, SEASONS } from "./game-data.js";
 
-export const STATE_VERSION = 3;
+export const STATE_VERSION = 4;
 export const SAVE_KEY = "tofu-bergerdil-save";
 const ATTRIBUTE_KEYS = ["joy", "skill", "bonds"];
 const CHARACTER_IDS = CHARACTERS.map(({ id }) => id);
@@ -58,8 +58,8 @@ function applyCharacterEffect(state, id, effect = {}) {
   }
   if (effect.learn && !character.learnedAbilities.includes(effect.learn)) character.learnedAbilities.push(effect.learn);
   const levelAbility = id === "silkenTofu"
-    ? { 2: "Measured portion", 3: "Soy-milk renewal", 4: "Living starter" }[character.level]
-    : { 2: "Garden muster", 3: "Rain-root renewal", 4: "Seed-the-future" }[character.level];
+    ? { 2: "Crisp-edge timing", 3: "Dashi renewal", 4: "Shared centre" }[character.level]
+    : { 2: "Golden lattice", 3: "Rain-root renewal", 4: "Binding crunch" }[character.level];
   if (levelAbility && !character.learnedAbilities.includes(levelAbility)) character.learnedAbilities.push(levelAbility);
 }
 
