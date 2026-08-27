@@ -1,98 +1,132 @@
 :root {
   color-scheme: dark;
-  --ink: #f8f1df;
-  --muted: #c9bfa8;
-  --night: #171511;
-  --card: #252119;
-  --gold: #f4bd50;
-  --gold-dark: #8c5b11;
-  --line: #4b4232;
+  --ink: #fff8e7;
+  --muted: #d7c9ad;
+  --night: #17130f;
+  --card: #2a2118;
+  --panel: #1e1812;
+  --gold: #f5bd56;
+  --cream: #fff0c9;
+  --green: #86c38a;
+  --red: #e88c79;
+  --line: #584a37;
   font-family: Georgia, "Times New Roman", serif;
 }
 
 * { box-sizing: border-box; }
-
+[hidden] { display: none !important; }
 body {
   min-height: 100vh;
   margin: 0;
   color: var(--ink);
-  background:
-    radial-gradient(circle at 50% 0, #3a3020 0, transparent 45rem),
-    var(--night);
+  background: radial-gradient(circle at 50% 0, #4a3824 0, transparent 50rem), var(--night);
 }
-
-button { font: inherit; }
-
-.game-shell {
-  width: min(46rem, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: clamp(2rem, 8vw, 5rem) 0;
-}
-
+button, input { font: inherit; }
+.game-shell { width: min(72rem, calc(100% - 2rem)); margin: 0 auto; padding: clamp(1.5rem, 5vw, 4rem) 0; }
 .masthead { text-align: center; }
-.masthead h1 { margin: .2rem 0 2rem; font-size: clamp(2rem, 7vw, 3.8rem); }
-.eyebrow { margin: 0; color: var(--gold); letter-spacing: .13em; text-transform: uppercase; font-size: .75rem; }
+.masthead h1 { margin: .2rem 0 1.5rem; font-size: clamp(2rem, 6vw, 3.8rem); }
+.eyebrow, .chapter-label { margin: 0 0 .35rem; color: var(--gold); font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 
 .card {
-  min-height: 24rem;
-  padding: clamp(1.4rem, 5vw, 2.8rem);
+  min-height: 30rem;
+  overflow: hidden;
+  padding: clamp(1.2rem, 4vw, 2.5rem);
   border: 1px solid var(--line);
-  border-radius: 1rem;
-  background: color-mix(in srgb, var(--card) 94%, transparent);
-  box-shadow: 0 1.5rem 4rem #0008;
+  border-radius: 1.25rem;
+  background: color-mix(in srgb, var(--card) 96%, transparent);
+  box-shadow: 0 1.5rem 4rem #0009;
 }
+h2 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.8rem); }
+h2:focus { outline: none; }
+h3 { margin: 0 0 .5rem; }
+p { line-height: 1.65; }
+.lede { color: var(--muted); font-size: 1.12rem; }
+.chapter-heading { margin-bottom: 1rem; }
 
-h2 { margin-top: 0; font-size: clamp(1.6rem, 5vw, 2.4rem); }
-p { line-height: 1.7; }
-.lede { color: var(--muted); font-size: 1.08rem; }
-.chapter-label { color: var(--gold); font-weight: bold; }
+.title-layout { display: grid; grid-template-columns: minmax(16rem, .85fr) 1fr; min-height: 33rem; margin: calc(clamp(1.2rem, 4vw, 2.5rem) * -1); }
+.title-art { min-height: 25rem; background: linear-gradient(0deg, #1b120688, transparent), url("assets/images/grandmas-kitchen.webp") center/cover; }
+.title-copy { align-self: center; padding: clamp(2rem, 6vw, 4rem); }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: .6rem;
-  padding: 0;
-  margin: 1.5rem 0;
-  list-style: none;
-}
+.resources { display: flex; gap: .6rem; flex-wrap: wrap; margin: 1rem 0 1.4rem; }
+.resources span { padding: .55rem .75rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: #17120dbb; }
+.resources b { color: var(--cream); }
+.story-scene, .milestone-banner { padding: 1rem 1.2rem; border-left: .3rem solid var(--gold); background: #17120d99; }
 
-.stats li { padding: .7rem; border: 1px solid var(--line); border-radius: .5rem; text-align: center; }
-.stats strong { display: block; color: var(--gold); font-size: 1.3rem; }
 .character-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0; }
-.character-panel { padding: 1rem; border: 1px solid var(--line); border-radius: .7rem; background: #17151166; }
-.character-panel h3 { margin: 0; color: var(--gold); font-size: 1.25rem; }
-.character-panel p { margin: .45rem 0; line-height: 1.45; }
+.character-panel { display: grid; grid-template-columns: 8rem 1fr; gap: 1rem; padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; background: var(--panel); }
+.character-panel h3 { color: var(--gold); font-size: 1.3rem; }
+.character-panel p { margin: .35rem 0; line-height: 1.4; }
+.portrait { width: 100%; height: auto; aspect-ratio: 1; border-radius: .65rem; object-fit: cover; object-position: center top; background: #55432d; }
 .character-role, .abilities { color: var(--muted); font-size: .88rem; }
-.arc-note { padding-top: .6rem; border-top: 1px solid var(--line); font-size: .9rem; }
-.character-panel .stats { margin: .8rem 0; }
-.choices { display: grid; gap: .8rem; margin-top: 1.5rem; }
+.vitality-label { display: grid; grid-template-columns: 1fr auto; gap: .25rem; margin-top: .65rem; font-size: .86rem; }
+.vitality-label progress { grid-column: 1 / -1; width: 100%; accent-color: var(--green); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; padding: 0; margin: .8rem 0; list-style: none; }
+.stats li { padding: .5rem; border: 1px solid var(--line); border-radius: .45rem; text-align: center; font-size: .82rem; }
+.stats strong { display: block; color: var(--gold); font-size: 1.15rem; }
+.character-panels--compact .character-panel { grid-template-columns: 5rem 1fr; }
+.character-panels--compact .character-role { display: none; }
 
-.button {
-  padding: .8rem 1.1rem;
-  border: 1px solid var(--gold);
-  border-radius: .45rem;
-  color: #1b150b;
-  background: var(--gold);
-  cursor: pointer;
-  font-weight: bold;
-}
+.season-track { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; padding: 0; margin: 1rem 0 1.7rem; list-style: none; color: var(--muted); font-size: .78rem; text-align: center; }
+.season-track li { position: relative; padding-top: 2.1rem; }
+.season-track li::after { content: ""; position: absolute; top: .8rem; left: -50%; width: 100%; height: 2px; background: var(--line); z-index: 0; }
+.season-track li:first-child::after { display: none; }
+.season-track span { position: absolute; top: 0; left: 50%; z-index: 1; display: grid; place-items: center; width: 1.7rem; height: 1.7rem; transform: translateX(-50%); border: 2px solid var(--line); border-radius: 50%; background: var(--panel); }
+.season-track .complete span { color: #152016; border-color: var(--green); background: var(--green); }
+.season-track .current { color: var(--cream); font-weight: 700; }
+.season-track .current span { border-color: var(--gold); }
 
-.choices .button { text-align: left; }
+.schedule-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0; }
+.schedule-card { min-width: 0; padding: 1rem; border: 1px solid var(--line); border-radius: .8rem; }
+.schedule-card legend { padding: 0 .4rem; color: var(--gold); font-size: 1.2rem; font-weight: 700; }
+.schedule-status { margin-top: 0; color: var(--muted); font-size: .86rem; }
+.activity-list { display: grid; gap: .55rem; }
+.activity-option { display: grid; grid-template-columns: auto 2rem 1fr; gap: .65rem; align-items: center; padding: .7rem; border: 1px solid var(--line); border-radius: .6rem; cursor: pointer; background: #17120d80; }
+.activity-option:has(input:checked) { border-color: var(--gold); background: #5b411d66; box-shadow: inset 0 0 0 1px var(--gold); }
+.activity-option:focus-within { outline: 3px solid white; outline-offset: 2px; }
+.activity-option.disabled { cursor: not-allowed; opacity: .45; }
+.activity-icon { font-size: 1.35rem; text-align: center; }
+.activity-option small, .choice-button small { display: block; margin-top: .18rem; color: var(--muted); font-weight: 400; line-height: 1.35; }
+.form-error { min-height: 1.5rem; color: #ffb4a5; }
+
+.result-activities { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+.result-activities p { margin: 0; padding: .8rem; border: 1px solid var(--line); border-radius: .6rem; }
+.event-card { margin: 1rem 0; padding: 1.1rem 1.2rem; border: 1px solid #8c6a32; border-radius: .8rem; background: linear-gradient(135deg, #6a4b1f44, #17120d); }
+.event-card p:last-child { margin-bottom: 0; }
+.event-card--major { padding: 1.5rem; }
+.season-changes { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin: 1rem 0; }
+.season-changes > * { padding: .7rem; border-radius: .6rem; background: #17120d99; }
+.season-changes ul { margin: .3rem 0; padding-left: 1.2rem; }
+.gain { color: #aee5b1; }
+.loss { color: #ffb4a5; }
+
+.choices { display: grid; gap: .8rem; margin-top: 1.2rem; }
+.button { padding: .85rem 1.15rem; border: 1px solid var(--gold); border-radius: .5rem; color: #1b150b; background: var(--gold); cursor: pointer; font-weight: 700; }
 .button:hover { filter: brightness(1.1); }
 .button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
 .button--quiet { color: var(--ink); background: transparent; border-color: var(--line); }
-.choice-title { display: block; }
-.choice-detail { display: block; margin-top: .25rem; font-size: .84rem; font-weight: normal; opacity: .78; }
+.choice-button { text-align: left; }
+.choice-button small { color: #4b3516; }
 .toolbar { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; padding-top: 1rem; }
 #save-status { color: var(--muted); font-size: .9rem; }
 
-@media (max-width: 30rem) {
-  .character-panels { grid-template-columns: 1fr; }
-  .stats { grid-template-columns: 1fr; }
+@media (max-width: 50rem) {
+  .title-layout { grid-template-columns: 1fr; }
+  .title-art { min-height: 17rem; }
+  .schedule-grid, .character-panels { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 32rem) {
+  .game-shell { width: min(100% - 1rem, 72rem); padding: .5rem 0 1rem; }
+  .card { padding: 1rem; border-radius: .8rem; }
+  .character-panel { grid-template-columns: 4.5rem 1fr; }
+  .character-role, .abilities { display: none; }
   .stats li { display: flex; justify-content: space-between; }
+  .stats strong { display: inline; }
+  .season-track { font-size: .66rem; }
+  .result-activities, .season-changes { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .card { animation: arrive .35s ease-out; }
-  @keyframes arrive { from { opacity: 0; transform: translateY(.5rem); } }
+  .card { animation: arrive .28s ease-out; }
+  @keyframes arrive { from { opacity: 0; transform: translateY(.4rem); } }
 }

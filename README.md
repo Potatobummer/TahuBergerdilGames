@@ -1,17 +1,33 @@
 # Tofu Bergerdil Games
 
-**Tofu Bergerdil Games** is a browser story about Silken Tofu and Bergie the Potato
-Hero learning to nourish their neighbours without losing themselves. The player
-guides both characters through five chapters. In every chapter they read a short
-scene, choose one activity, and resolve a milestone before moving forward.
+**Tofu Bergerdil Games** is a cooperative browser raising game about Silken Tofu and
+Bergie the Potato Hero learning to nourish their neighbours without losing themselves.
+Guide both friends across five chapters and twenty seasons. Plan their work, study,
+rest, and community life while protecting the partnership that holds them together.
 
 ## Play online
 
-The GitHub Pages build is available at:
+https://potatobummer.github.io/TofuBergerdilGames/
 
-https://potatobummer.github.io/TahuBergerdilGames/
+On iPhone, open the site in Safari and use **Share -> Add to Home Screen** to install
+it like an app.
 
-On iPhone, open the site in Safari and use **Share → Add to Home Screen** to install it like an app.
+## How to play
+
+1. Read the introduction to each life chapter.
+2. Plan one seasonal activity for Silken and one for Bergie.
+3. Balance coins, reputation, partnership, individual attributes, and vitality.
+4. Respond to seasonal events created by the pair's condition and earlier plans.
+5. After four seasons, face a milestone whose consequences carry into later chapters.
+6. Complete all five chapters to discover both individual vocations and their shared
+   future.
+
+Matching schedules strengthen the partnership, while separate schedules can develop
+different strengths. A depleted character must rest. Conditional events only occur
+once per life, so different plans reveal different scenes.
+
+Progress can be saved in the browser after starting. **Continue saved life** restores
+that local save, and **Restart** clears it.
 
 ## Play locally
 
@@ -24,43 +40,14 @@ python3 -m http.server 8000
 
 Then visit <http://localhost:8000>.
 
-## How to play
+## Development
 
-1. Select **Start a new story**.
-2. Use **Continue** to move through the chapter dialogue.
-3. Pick one activity. Activities change each character's Joy, Skill, Bonds, vitality,
-   experience, and abilities separately.
-4. Choose how to face the chapter milestone.
-5. Repeat through all five chapters to discover the pair's shared ending.
+Run the automated simulation and accessibility tests with:
 
-Progress can be saved to the browser at any time after starting. **Load progress**
-restores that local save, and **Restart** clears it and returns to the title screen.
-
-## Source tree
-
-```text
-.
-├── index.html          # Accessible game shell
-├── styles.css          # Responsive presentation
-├── js/
-│   ├── app.js          # Five-chapter game loop and rendering
-│   ├── game-data.js    # Declarative story, choices, and endings
-│   └── state.js        # Versioned state creation, validation, and persistence
-└── assets/
-    ├── audio/          # Reserved for future sound assets
-    ├── fonts/          # Reserved for locally hosted fonts
-    ├── icons/          # Reserved for interface icons
-    └── images/         # Reserved for illustrations
+```sh
+npm test
 ```
 
-## Project goals
-
-- Run reliably in modern browsers and remain straightforward to develop and deploy.
-- Keep story content separate from the game loop so it can be edited without changing
-  application logic.
-- Keep saves resilient through an explicit schema version and validation on load.
-- Provide keyboard-friendly native controls and a live status region.
-
-The story contains a complete five-chapter arc for two heroes and three possible
-endings. The asset directories are intentionally empty placeholders; audio, custom
-fonts, icons, and illustrations are not part of this release.
+The source keeps story and simulation data in `js/game-data.js`, state transitions
+and save validation in `js/state.js`, and browser rendering in `js/app.js`. Original
+storybook artwork is stored in `assets/images` and cached for offline play.

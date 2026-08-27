@@ -44,6 +44,92 @@ const gain = (attributes, vitality = 0, experience = 1, ability) => ({
   attributes, condition: { vitality }, progression: { experience }, ...(ability ? { learn: ability } : {})
 });
 
+export const SEASONS = ["Early Rain", "High Sun", "Harvest Wind", "Long Night"];
+
+export const ACTIVITIES = [
+  {
+    id: "study", label: "Kitchen lessons", icon: "🥄",
+    detail: "Build Skill and experience. Tuition costs 4 coins.",
+    effects: gain({ skill: 2, joy: -1 }, -5, 2), resources: { coins: -4 }
+  },
+  {
+    id: "stall", label: "Run the food stall", icon: "🍜",
+    detail: "Earn 8 coins and reputation, but serving is tiring.",
+    effects: gain({ bonds: 1 }, -12, 2), resources: { coins: 8, reputation: 2 }
+  },
+  {
+    id: "community", label: "Community kitchen", icon: "🫂",
+    detail: "Deepen Bonds and reputation. Ingredients cost 2 coins.",
+    effects: gain({ bonds: 2 }, -8, 2), resources: { coins: -2, reputation: 4, relationship: 1 }
+  },
+  {
+    id: "play", label: "Play and explore", icon: "🌦️",
+    detail: "Restore Joy and discover the neighbourhood.",
+    effects: gain({ joy: 3 }, -3, 1), resources: { coins: -1 }
+  },
+  {
+    id: "garden", label: "Tend the garden", icon: "🌱",
+    detail: "Grow ingredients, Skill, and Bonds at a gentle pace.",
+    effects: gain({ skill: 1, bonds: 1 }, -6, 2), resources: { coins: 3, reputation: 1 }
+  },
+  {
+    id: "rest", label: "Rest with Grandma", icon: "🌙",
+    detail: "Recover vitality and Joy. No income this season.",
+    effects: gain({ joy: 1 }, 24, 0), resources: { reputation: -1 }
+  }
+];
+
+export const SEASON_EVENTS = [
+  {
+    id: "kitchen-duet", title: "A recipe in two voices",
+    when: (state, plans) => plans.every((id) => id === "study"),
+    text: "Grandma notices that Silken seasons by listening while Bergie measures by instinct. Together they invent a fritter neither could make alone.",
+    effects: effects(gain({ skill: 1 }, 0, 1), gain({ skill: 1 }, 0, 1)), resources: { relationship: 3 }
+  },
+  {
+    id: "market-rush", title: "The queue around the field",
+    when: (state, plans) => plans.every((id) => id === "stall"),
+    text: "The stall sells out before sunset. The applause feels wonderful, but both friends return home with trembling hands.",
+    effects: effects(gain({ joy: 1 }, -5), gain({ joy: 1 }, -5)), resources: { coins: 6, reputation: 4 }
+  },
+  {
+    id: "shared-table", title: "Everyone brings a bowl",
+    when: (state, plans) => plans.every((id) => id === "community"),
+    text: "Neighbours arrive with vegetables, stories, and an insistence on washing the dishes. Care begins to travel in both directions.",
+    effects: effects(gain({ bonds: 1 }, 4), gain({ bonds: 1 }, 4)), resources: { relationship: 4, reputation: 3 }
+  },
+  {
+    id: "permission-to-rest", title: "Keeping watch",
+    when: (state, plans) => plans.filter((id) => id === "rest").length === 1,
+    text: "The working friend returns early with supper. Rest stops feeling like abandonment and starts becoming something they protect for one another.",
+    effects: {}, resources: { relationship: 2 }
+  },
+  {
+    id: "grandmas-warning", title: "Grandma closes the shutters",
+    when: (state) => Object.values(state.characters).some(({ condition }) => condition.vitality <= 30),
+    text: "Grandma sees the signs of depletion and closes the stall for an evening, regardless of the waiting customers.",
+    effects: effects(gain({}, 10), gain({}, 10)), resources: { reputation: -2, relationship: 1 }
+  },
+  {
+    id: "neighbourhood-pantry", title: "The pantry that answers back",
+    when: (state) => state.resources.coins <= 5 && state.resources.reputation >= 8,
+    text: "People who remember being fed quietly leave rice, soybeans, and potatoes by the kitchen door.",
+    effects: {}, resources: { coins: 8, relationship: 1 }
+  },
+  {
+    id: "local-heroes", title: "A name on every noticeboard",
+    when: (state) => state.resources.reputation >= 24,
+    text: "The neighbourhood now knows them by name. New invitations arrive, along with expectations they will have to learn to manage.",
+    effects: effects(gain({ bonds: 1 }), gain({ bonds: 1 })), resources: { coins: 4 }
+  },
+  {
+    id: "unhurried-friendship", title: "An evening with nowhere to be",
+    when: (state) => state.resources.relationship >= 18,
+    text: "They sit beneath the awning without fixing anything. The silence itself becomes proof that their friendship is more than shared work.",
+    effects: effects(gain({ joy: 2 }, 5), gain({ joy: 2 }, 5)), resources: {}
+  }
+];
+
 export const CHAPTERS = [
   {
     ageOffset: 0, arcStage: 0, title: "The First Sharing",
@@ -108,18 +194,41 @@ export const CHAPTERS = [
   }
 ];
 
-export const ENDINGS = {
-  craft: { title: "The Regenerative Kitchen", text: "Silken and Bergie teach recipes that account for rest, consent, and renewal. Their craft feeds people without hiding its cost." },
-  community: { title: "The Table That Gives Back", text: "Every shared portion begins a cycle of care. The neighbourhood tends soy, soil, memories, and one another." },
-  joyful: { title: "The Ever-Growing Feast", text: "Their living starter and golden patch keep surprising everyone. Giving remains joyful because nobody is asked to disappear." }
+const VOCATIONS = {
+  silkenTofu: {
+    joy: "a storyteller whose playful dishes recover forgotten memories",
+    skill: "a master of living starters and restorative recipes",
+    bonds: "a patient teacher who makes every kitchen feel like home"
+  },
+  potatoHero: {
+    joy: "a travelling field cook who turns every match into a feast",
+    skill: "a fearless grower who makes exhausted soil abundant again",
+    bonds: "an organiser who can rally a whole neighbourhood before breakfast"
+  }
 };
 
-export function getEnding(characters) {
-  const totals = Object.values(characters).reduce((sum, character) => {
-    for (const key of Object.keys(sum)) sum[key] += character.attributes[key];
-    return sum;
-  }, { joy: 0, skill: 0, bonds: 0 });
-  if (totals.bonds >= totals.skill && totals.bonds >= totals.joy) return ENDINGS.community;
-  if (totals.skill >= totals.joy) return ENDINGS.craft;
-  return ENDINGS.joyful;
+function strongestAttribute(character) {
+  return Object.entries(character.attributes).sort(([, left], [, right]) => right - left)[0][0];
+}
+
+export function getEnding(state) {
+  const silken = VOCATIONS.silkenTofu[strongestAttribute(state.characters.silkenTofu)];
+  const bergie = VOCATIONS.potatoHero[strongestAttribute(state.characters.potatoHero)];
+  const averageVitality = Object.values(state.characters).reduce((sum, character) => sum + character.condition.vitality, 0) / 2;
+  let title = "The Two Roads Home";
+  let shared = "They follow different callings, meeting often enough to remember why the first fritter mattered.";
+  if (averageVitality <= 30) {
+    title = "The Kitchen That Finally Closed";
+    shared = "Their generosity outran their recovery. The neighbourhood closes the stall for a season and, at last, learns to feed its exhausted cooks.";
+  } else if (state.resources.relationship >= 28 && state.resources.reputation >= 35) {
+    title = "The Table That Gives Back";
+    shared = "Their partnership becomes a cooperative where every guest returns care to its source.";
+  } else if (state.resources.relationship >= 28) {
+    title = "The Unhurried Partnership";
+    shared = "They choose a smaller table and protect the time required to remain friends as well as heroes.";
+  } else if (state.resources.reputation >= 35) {
+    title = "The Neighbourhood's Kitchen";
+    shared = "Their work belongs to the whole neighbourhood now, supported by many hands instead of two disappearing bodies.";
+  }
+  return { title, text: `${shared} Silken becomes ${silken}. Bergie becomes ${bergie}.` };
 }
