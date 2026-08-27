@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tofu-bergerdil-games-v6';
+const CACHE_NAME = 'tofu-bergerdil-games-v7';
 const APP_SHELL = [
   './',
   './index.html',

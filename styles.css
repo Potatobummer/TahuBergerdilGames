@@ -135,6 +135,7 @@ p { line-height: 1.65; }
 .toolbar { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; padding-top: 1rem; }
 #save-status { color: var(--muted); font-size: .9rem; }
 .save-indicator::before { content: "✓ "; color: var(--green); }
+.game-version { margin: .8rem 0 0; color: #a99b82; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: .72rem; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
 .ending-layout { text-align: center; }
 .ending-layout > .lede { max-width: 54rem; margin: 1.2rem auto; }
 .ending-layout .resources { justify-content: center; }
