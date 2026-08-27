@@ -1,7 +1,7 @@
 {
-  "name": "Tahu Bergedil Games",
-  "short_name": "Tahu Games",
-  "description": "A seven-chapter coming-of-age browser story.",
+  "name": "Tofu Bergerdil Games",
+  "short_name": "Tofu Bergerdil",
+  "description": "A five-chapter story about nourishment, sacrifice, and renewal.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
