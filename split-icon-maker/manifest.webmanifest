@@ -1,0 +1,9 @@
+{
+  "name": "Split Icon Maker",
+  "short_name": "Split Icon",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#111827",
+  "description": "Merge two images with a user-drawn split line and export a square app icon."
+}
