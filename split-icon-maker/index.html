@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <title>Split Icon Maker</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg:#0b1020; --panel:#141b2d; --panel2:#1a2338; --text:#eef2ff;
+      --muted:#9aa6c1; --accent:#7c9cff; --border:#2a3550;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:linear-gradient(180deg,#0a0f1f,#10172a);color:var(--text);
+      min-height:100vh;
+    }
+    .app{max-width:1100px;margin:auto;padding:20px}
+    h1{font-size:clamp(24px,4vw,38px);margin:0 0 6px}
+    .sub{color:var(--muted);margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px}
+    @media(max-width:850px){.grid{grid-template-columns:1fr}.controls{order:-1}}
+    .card{background:rgba(20,27,45,.96);border:1px solid var(--border);border-radius:18px;padding:14px}
+    .canvas-wrap{display:grid;place-items:center;overflow:hidden}
+    canvas{width:min(100%,720px);aspect-ratio:1/1;height:auto;border-radius:18px;background:#000;touch-action:none;box-shadow:0 12px 40px #0007}
+    .controls{display:flex;flex-direction:column;gap:12px}
+    .section{background:var(--panel2);border:1px solid var(--border);border-radius:14px;padding:12px}
+    .section h2{font-size:14px;margin:0 0 10px;color:#dfe6ff}
+    label{display:block;font-size:12px;color:var(--muted);margin:8px 0 4px}
+    input[type=file]{width:100%}
+    input[type=range]{width:100%}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    button{
+      appearance:none;border:1px solid var(--border);background:#202b45;color:white;
+      border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer;
+    }
+    button.primary{background:var(--accent);color:#081023;border-color:transparent}
+    button.active{outline:2px solid var(--accent)}
+    .hint{font-size:12px;color:var(--muted);line-height:1.4}
+    .pill{display:inline-block;padding:3px 8px;border-radius:999px;background:#263252;color:#cdd7ff;font-size:11px}
+    .footer{margin-top:14px;color:var(--muted);font-size:12px;text-align:center}
+  </style>
+</head>
+<body>
+<div class="app">
+  <h1>Split Icon Maker</h1>
+  <div class="sub">Upload two images, draw the split line, then export a 1024×1024 PNG.</div>
+
+  <div class="grid">
+    <div class="card canvas-wrap">
+      <canvas id="c" width="1024" height="1024" aria-label="Split icon preview"></canvas>
+    </div>
+
+    <div class="controls">
+      <div class="section">
+        <h2>1. Upload images</h2>
+        <label>Image A</label>
+        <input id="fileA" type="file" accept="image/*">
+        <label>Image B</label>
+        <input id="fileB" type="file" accept="image/*">
+        <div class="row" style="margin-top:10px">
+          <button id="swap">Swap sides</button>
+          <button id="reset">Reset</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>2. Draw your split</h2>
+        <button id="drawMode" class="active" style="width:100%">Draw split line</button>
+        <p class="hint">Drag across the square. The line can be horizontal, vertical, or diagonal. Default is top-right → bottom-left.</p>
+        <span class="pill">Tip: draw beyond the image edges for a clean split</span>
+      </div>
+
+      <div class="section">
+        <h2>3. Adjust image A</h2>
+        <label>Zoom</label><input id="zoomA" type="range" min="0.5" max="3" step="0.01" value="1">
+        <label>Horizontal position</label><input id="xA" type="range" min="-512" max="512" step="1" value="0">
+        <label>Vertical position</label><input id="yA" type="range" min="-512" max="512" step="1" value="0">
+      </div>
+
+      <div class="section">
+        <h2>4. Adjust image B</h2>
+        <label>Zoom</label><input id="zoomB" type="range" min="0.5" max="3" step="0.01" value="1">
+        <label>Horizontal position</label><input id="xB" type="range" min="-512" max="512" step="1" value="0">
+        <label>Vertical position</label><input id="yB" type="range" min="-512" max="512" step="1" value="0">
+      </div>
+
+      <div class="section">
+        <h2>5. Export</h2>
+        <button id="download" class="primary" style="width:100%">Download 1024×1024 PNG</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer">Everything runs locally in your browser. Your images are not uploaded anywhere.</div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+let imgA = null, imgB = null;
+let line = {x1:1024, y1:0, x2:0, y2:1024};
+let drawing = false;
+let swapped = false;
+
+const controls = {
+  zoomA:document.getElementById('zoomA'), xA:document.getElementById('xA'), yA:document.getElementById('yA'),
+  zoomB:document.getElementById('zoomB'), xB:document.getElementById('xB'), yB:document.getElementById('yB'),
+};
+
+function loadFile(input, setter){
+  const f = input.files?.[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  const img = new Image();
+  img.onload = () => { setter(img); URL.revokeObjectURL(url); render(); };
+  img.src = url;
+}
+document.getElementById('fileA').addEventListener('change', e=>loadFile(e.target, i=>imgA=i));
+document.getElementById('fileB').addEventListener('change', e=>loadFile(e.target, i=>imgB=i));
+
+Object.values(controls).forEach(el=>el.addEventListener('input', render));
+
+function signedDistance(p){
+  const {x1,y1,x2,y2}=line;
+  return (x2-x1)*(p.y-y1) - (y2-y1)*(p.x-x1);
+}
+
+function clipHalfPlane(keepPositive){
+  let poly = [{x:0,y:0},{x:1024,y:0},{x:1024,y:1024},{x:0,y:1024}];
+  const inside = p => keepPositive ? signedDistance(p)>=0 : signedDistance(p)<=0;
+  const intersect = (a,b)=>{
+    const da=signedDistance(a), db=signedDistance(b);
+    const t = da/(da-db);
+    return {x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t};
+  };
+  let out=[];
+  for(let i=0;i<poly.length;i++){
+    const a=poly[i], b=poly[(i+1)%poly.length];
+    const ia=inside(a), ib=inside(b);
+    if(ia && ib) out.push(b);
+    else if(ia && !ib) out.push(intersect(a,b));
+    else if(!ia && ib){ out.push(intersect(a,b)); out.push(b); }
+  }
+  return out;
+}
+
+function drawImageCover(img, z, ox, oy){
+  if(!img) return;
+  const base = Math.max(1024/img.width,1024/img.height);
+  const scale = base*z;
+  const w=img.width*scale, h=img.height*scale;
+  const x=(1024-w)/2+ox, y=(1024-h)/2+oy;
+  ctx.drawImage(img,x,y,w,h);
+}
+
+function fillSide(img, positive, z, ox, oy, fallback){
+  const poly=clipHalfPlane(positive);
+  ctx.save();
+  ctx.beginPath();
+  if(poly.length){
+    ctx.moveTo(poly[0].x,poly[0].y);
+    for(let i=1;i<poly.length;i++) ctx.lineTo(poly[i].x,poly[i].y);
+    ctx.closePath();
+    ctx.clip();
+  }
+  if(img) drawImageCover(img,z,ox,oy);
+  else {
+    ctx.fillStyle=fallback;
+    ctx.fillRect(0,0,1024,1024);
+    ctx.fillStyle="#ffffffaa";
+    ctx.font="bold 54px system-ui";
+    ctx.textAlign="center";
+    ctx.fillText(positive ? (swapped?"IMAGE A":"IMAGE B") : (swapped?"IMAGE B":"IMAGE A"),512,520);
+  }
+  ctx.restore();
+}
+
+function render(){
+  ctx.clearRect(0,0,1024,1024);
+  ctx.fillStyle="#000"; ctx.fillRect(0,0,1024,1024);
+
+  const A = {z:+controls.zoomA.value, x:+controls.xA.value, y:+controls.yA.value};
+  const B = {z:+controls.zoomB.value, x:+controls.xB.value, y:+controls.yB.value};
+
+  if(!swapped){
+    fillSide(imgA,false,A.z,A.x,A.y,"#1f3552");
+    fillSide(imgB,true,B.z,B.x,B.y,"#5a2d2d");
+  } else {
+    fillSide(imgA,true,A.z,A.x,A.y,"#1f3552");
+    fillSide(imgB,false,B.z,B.x,B.y,"#5a2d2d");
+  }
+
+  ctx.save();
+  ctx.strokeStyle="#ffffff";
+  ctx.lineWidth=5;
+  ctx.setLineDash([18,14]);
+  ctx.beginPath(); ctx.moveTo(line.x1,line.y1); ctx.lineTo(line.x2,line.y2); ctx.stroke();
+  ctx.restore();
+}
+
+function pointerPos(e){
+  const r=canvas.getBoundingClientRect();
+  return {
+    x:(e.clientX-r.left)*(1024/r.width),
+    y:(e.clientY-r.top)*(1024/r.height)
+  };
+}
+canvas.addEventListener('pointerdown',e=>{
+  drawing=true; canvas.setPointerCapture(e.pointerId);
+  const p=pointerPos(e); line.x1=p.x; line.y1=p.y; line.x2=p.x; line.y2=p.y; render();
+});
+canvas.addEventListener('pointermove',e=>{
+  if(!drawing) return;
+  const p=pointerPos(e); line.x2=p.x; line.y2=p.y; render();
+});
+canvas.addEventListener('pointerup',e=>{
+  drawing=false;
+  const p=pointerPos(e); line.x2=p.x; line.y2=p.y;
+  const d=Math.hypot(line.x2-line.x1,line.y2-line.y1);
+  if(d<20) line={x1:1024,y1:0,x2:0,y2:1024};
+  render();
+});
+canvas.addEventListener('pointercancel',()=>{drawing=false});
+
+document.getElementById('swap').onclick=()=>{swapped=!swapped; render();};
+document.getElementById('reset').onclick=()=>{
+  line={x1:1024,y1:0,x2:0,y2:1024};
+  swapped=false;
+  for(const k in controls) controls[k].value = k.startsWith('zoom') ? 1 : 0;
+  render();
+};
+
+document.getElementById('download').onclick=()=>{
+  ctx.clearRect(0,0,1024,1024);
+  ctx.fillStyle="#000";ctx.fillRect(0,0,1024,1024);
+  const A={z:+controls.zoomA.value,x:+controls.xA.value,y:+controls.yA.value};
+  const B={z:+controls.zoomB.value,x:+controls.xB.value,y:+controls.yB.value};
+  if(!swapped){ fillSide(imgA,false,A.z,A.x,A.y,"#1f3552"); fillSide(imgB,true,B.z,B.x,B.y,"#5a2d2d");}
+  else { fillSide(imgA,true,A.z,A.x,A.y,"#1f3552"); fillSide(imgB,false,B.z,B.x,B.y,"#5a2d2d");}
+  const a=document.createElement('a');
+  a.download='split-icon-1024.png';
+  a.href=canvas.toDataURL('image/png');
+  a.click();
+  render();
+};
+
+render();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
